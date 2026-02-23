@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 export default function ImageSlider({ images, alt }) {
@@ -10,36 +9,34 @@ export default function ImageSlider({ images, alt }) {
 
   return (
     <div className="relative w-full aspect-[9/16] sm:aspect-[9/18] max-w-[280px] mx-auto overflow-hidden rounded-2xl bg-black/40">
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={current}
-          src={images[current]}
-          alt={`${alt} screenshot ${current + 1}`}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
-          transition={{ duration: 0.3 }}
-          className="w-full h-full object-contain"
+      {images.map((src, i) => (
+        <img
+          key={i}
+          src={src}
+          alt={`${alt} screenshot ${i + 1}`}
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-300 ${
+            i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
+          }`}
           loading="lazy"
         />
-      </AnimatePresence>
+      ))}
 
       <button
         onClick={prev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 transition-all"
+        className="absolute z-20 left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 transition-all"
         aria-label="Previous image"
       >
         <ChevronLeft size={16} />
       </button>
       <button
         onClick={next}
-        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 transition-all"
+        className="absolute z-20 right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 transition-all"
         aria-label="Next image"
       >
         <ChevronRight size={16} />
       </button>
 
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+      <div className="absolute z-20 bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
         {images.map((_, i) => (
           <button
             key={i}

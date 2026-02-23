@@ -13,8 +13,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
+        <div className="flex flex-col items-center text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -50,7 +49,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.45 }}
-              className="flex items-center justify-center lg:justify-start gap-2 text-text-muted text-sm mb-8"
+              className="flex items-center justify-center gap-2 text-text-muted text-sm mb-8"
             >
               <MapPin size={14} />
               <span>Latakia, Syria</span>
@@ -60,7 +59,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row items-center gap-4 justify-center"
             >
               <a
                 href="#projects"
@@ -83,26 +82,6 @@ export default function Hero() {
                 Get In Touch
               </a>
             </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="order-1 lg:order-2 flex-shrink-0"
-          >
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-accent rounded-full blur-2xl opacity-20 animate-glow" />
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border-2 border-white/10">
-                <img
-                  src="/assets/meCroped.png"
-                  alt="Mohammed Ghandor"
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                />
-              </div>
-            </div>
-          </motion.div>
         </div>
       </div>
 
