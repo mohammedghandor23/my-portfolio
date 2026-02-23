@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Github, Linkedin, Send } from 'lucide-react'
+import { Mail, Phone, MapPin, Send } from 'lucide-react'
 import SectionHeading from './SectionHeading'
 
 const contactInfo = [
@@ -20,19 +20,6 @@ const contactInfo = [
     label: 'Location',
     value: 'Latakia, Syria',
     href: null,
-  },
-]
-
-const socials = [
-  {
-    icon: Github,
-    label: 'GitHub',
-    href: '#',
-  },
-  {
-    icon: Linkedin,
-    label: 'LinkedIn',
-    href: '#',
   },
 ]
 
@@ -88,25 +75,7 @@ export default function Contact() {
               </div>
 
               <div className="border-t border-white/5 pt-8">
-                <p className="text-center text-text-muted text-sm mb-5">
-                  Connect with me
-                </p>
-                <div className="flex items-center justify-center gap-4">
-                  {socials.map((social) => (
-                    <motion.a
-                      key={social.label}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-text-secondary hover:text-white hover:border-accent-purple/30 hover:bg-accent-purple/10 transition-all duration-300"
-                      aria-label={social.label}
-                    >
-                      <social.icon size={20} />
-                    </motion.a>
-                  ))}
-
+                <div className="flex items-center justify-center">
                   <motion.a
                     href="mailto:mohammed.ghandor23@gmail.com"
                     whileHover={{ scale: 1.05, y: -2 }}
