@@ -92,8 +92,8 @@ function ProjectCard({ project, index, reversed }) {
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="glass-card p-6 md:p-8 lg:p-10"
     >
-      <div className={`flex flex-col ${reversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 lg:gap-12`}>
-        <div className="flex-1 flex flex-col justify-center">
+      <div className={`flex flex-col ${reversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 lg:gap-12 items-center`}>
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <h3 className="text-2xl md:text-3xl font-bold gradient-text">
               {project.title}
@@ -143,22 +143,22 @@ function ProjectCard({ project, index, reversed }) {
           </div>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="w-full lg:w-auto flex-shrink-0">
           {isForty ? (
-            <div className="flex flex-col sm:flex-row gap-6 items-center">
+            <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
               <div>
                 <div className="flex items-center gap-2 mb-3 justify-center">
                   <Smartphone size={14} className="text-accent-purple" />
                   <span className="text-xs font-medium text-text-secondary uppercase tracking-wider">Customer App</span>
                 </div>
-                <ImageSlider images={project.customerImages} alt={`${project.title} Customer`} />
+                <ImageSlider images={project.customerImages} alt={`${project.title} Customer`} size="sm" />
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-3 justify-center">
                   <Monitor size={14} className="text-accent-blue" />
                   <span className="text-xs font-medium text-text-secondary uppercase tracking-wider">System App</span>
                 </div>
-                <ImageSlider images={project.dashboardImages} alt={`${project.title} Dashboard`} />
+                <ImageSlider images={project.dashboardImages} alt={`${project.title} Dashboard`} size="sm" />
               </div>
             </div>
           ) : (

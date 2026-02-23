@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-export default function ImageSlider({ images, alt }) {
+export default function ImageSlider({ images, alt, size = 'default' }) {
   const [current, setCurrent] = useState(0)
 
   const prev = () => setCurrent((c) => (c === 0 ? images.length - 1 : c - 1))
   const next = () => setCurrent((c) => (c === images.length - 1 ? 0 : c + 1))
 
+  const sizeClasses = {
+    default: 'max-w-[300px] aspect-[9/17]',
+    sm: 'max-w-[240px] aspect-[9/17]',
+  }
+
   return (
-    <div className="relative w-full aspect-[9/16] sm:aspect-[9/18] max-w-[280px] mx-auto overflow-hidden rounded-2xl bg-black/40">
+    <div className={`relative w-full ${sizeClasses[size] || sizeClasses.default} mx-auto overflow-hidden rounded-2xl bg-black/40`}>
       {images.map((src, i) => (
         <img
           key={i}
