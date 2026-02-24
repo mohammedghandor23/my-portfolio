@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,6 +15,7 @@
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: #7c3aed #0f0f0f;
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -20,6 +23,75 @@
     color: #ffffff;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
+    transition: opacity 320ms cubic-bezier(0.22, 1, 0.36, 1), transform 320ms cubic-bezier(0.22, 1, 0.36, 1), filter 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Radix Select uses react-remove-scroll and toggles body scrollbar visibility.
+     Keep scrollbar stable to avoid layout jump/flicker when opening language menu. */
+  html body[data-scroll-locked] {
+    overflow-y: scroll !important;
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  html[lang="ar"] body {
+    font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+  }
+
+  @keyframes lang-switch-old {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(10px) scale(0.99);
+      filter: blur(2px);
+    }
+  }
+
+  @keyframes lang-switch-new {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(1.01);
+      filter: blur(2px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  html.lang-switching-out body,
+  html.lang-switching-in body {
+    pointer-events: none;
+  }
+
+  html.lang-switching-out body {
+    animation: lang-switch-old 170ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  html.lang-switching-in body {
+    animation: lang-switch-new 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @supports (view-transition-name: root) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 360ms;
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      mix-blend-mode: normal;
+    }
+
+    ::view-transition-old(root) {
+      animation-name: lang-switch-old;
+    }
+
+    ::view-transition-new(root) {
+      animation-name: lang-switch-new;
+    }
   }
 
   ::-webkit-scrollbar {
@@ -90,8 +162,12 @@
     opacity: 1;
   }
 
+  .site-container {
+    @apply w-[90%] mx-auto;
+  }
+
   .section-padding {
-    @apply px-6 md:px-12 lg:px-24 xl:px-32 py-20 md:py-28;
+    @apply py-20 md:py-28;
   }
 
   .glow-dot {
@@ -100,6 +176,51 @@
     border-radius: 50%;
     background: #7c3aed;
     box-shadow: 0 0 12px rgba(124, 58, 237, 0.6);
+  }
+
+  @keyframes selectContentIn {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(-2px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes selectContentOut {
+    from {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.98) translateY(-1px);
+    }
+  }
+
+  .select-content {
+    transform-origin: var(--radix-select-content-transform-origin);
+  }
+
+  .select-content[data-state='open'] {
+    animation: selectContentIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .select-content[data-state='closed'] {
+    animation: selectContentOut 120ms ease-in;
+  }
+
+  .select-item[data-highlighted] {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .select-content[data-state='open'],
+    .select-content[data-state='closed'] {
+      animation: none;
+    }
   }
 }
 
