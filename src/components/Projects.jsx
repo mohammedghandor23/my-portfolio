@@ -139,7 +139,7 @@ export default function Projects() {
         : [];
 
     return (
-        <section id="projects" className="section-padding">
+        <section id="projects" className="section-padding defer-section">
             <div className="site-container">
                 <SectionHeading
                     title={t("projects.title")}

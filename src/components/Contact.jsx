@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 
-const PHONE_LINK = "tel:+963980895955";
+const PHONE_LINK = "tel:+963980895956";
 
 export default function Contact() {
     const { t } = useTranslation();
@@ -59,7 +59,10 @@ export default function Contact() {
     };
 
     return (
-        <section id="contact" className="section-padding relative overflow-hidden">
+        <section
+            id="contact"
+            className="section-padding defer-section relative overflow-hidden"
+        >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(124,58,237,0.14),transparent_58%)]" />
 
             <div className="site-container relative">

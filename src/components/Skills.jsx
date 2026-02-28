@@ -60,7 +60,7 @@ export default function Skills() {
     const { t } = useTranslation();
 
     return (
-        <section id="skills" className="section-padding">
+        <section id="skills" className="section-padding defer-section">
             <div className="site-container">
                 <SectionHeading
                     title={t("skills.title")}

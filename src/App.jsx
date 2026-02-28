@@ -1,25 +1,34 @@
+import { lazy, Suspense } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import Skills from "./components/Skills";
-import Projects from "./components/Projects";
-import Education from "./components/Education";
-import Contact from "./components/Contact";
-import ScrollToTopButton from "./components/ScrollToTopButton";
-import AmbientBackground from "./components/AmbientBackground";
+
+const AmbientBackground = lazy(() => import("./components/AmbientBackground"));
+const DeferredSections = lazy(() => import("./components/DeferredSections"));
+
+function DeferredSectionsFallback() {
+    return (
+        <>
+            <section id="skills" className="section-padding min-h-[70vh]" />
+            <section id="projects" className="section-padding min-h-[90vh]" />
+            <section id="education" className="section-padding min-h-[55vh]" />
+            <section id="contact" className="section-padding min-h-[55vh]" />
+        </>
+    );
+}
 
 function App() {
     return (
         <div className="relative min-h-screen bg-primary">
-            <AmbientBackground />
+            <Suspense fallback={null}>
+                <AmbientBackground />
+            </Suspense>
 
             <div className="relative z-10">
                 <Navbar />
                 <Hero />
-                <Skills />
-                <Projects />
-                <Education />
-                <Contact />
-                <ScrollToTopButton />
+                <Suspense fallback={<DeferredSectionsFallback />}>
+                    <DeferredSections />
+                </Suspense>
             </div>
         </div>
     );

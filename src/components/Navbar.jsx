@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Menu, X } from "lucide-react";
 import {
@@ -127,11 +126,8 @@ export default function Navbar() {
 
     return (
         <>
-            <motion.nav
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+            <nav
+                className={`navbar-enter fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
                     scrolled
                         ? "backdrop-blur-2xl bg-white/[0.06] shadow-[0_10px_30px_rgba(0,0,0,0.18)]"
                         : "backdrop-blur-xl bg-white/[0.03]"
@@ -139,57 +135,47 @@ export default function Navbar() {
             >
                 <div className="site-container">
                     <div className="flex items-center justify-between h-16 md:h-20">
-                        <motion.a
+                        <a
                             href="#home"
                             onClick={(e) => {
                                 e.preventDefault();
                                 handleClick("#home");
                             }}
-                            className="text-xl md:text-2xl font-bold tracking-tight"
-                            whileHover={{ scale: 1.02 }}
+                            className="text-xl md:text-2xl font-bold tracking-tight transition-transform duration-200 hover:scale-[1.02]"
                         >
                             <span className="gradient-text text-2xl">MG</span>
-                        </motion.a>
+                        </a>
 
                         <div className="hidden md:flex items-center gap-1">
-                            {navLinks.map((link) => (
-                                <a
-                                    key={link.key}
-                                    href={link.href}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handleClick(link.href);
-                                    }}
-                                    className={`relative px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-lg ${
-                                        activeSection === link.href.slice(1)
-                                            ? "text-white"
-                                            : "text-text-secondary hover:text-white"
-                                    }`}
-                                >
-                                    {activeSection === link.href.slice(1) && (
-                                        <motion.div
-                                            layoutId="activeNav"
-                                            className="absolute inset-0 bg-white/5 rounded-lg"
-                                            transition={{
-                                                type: "spring",
-                                                stiffness: 300,
-                                                damping: 30,
-                                            }}
+                            {navLinks.map((link) => {
+                                const isActive = activeSection === link.href.slice(1);
+                                return (
+                                    <a
+                                        key={link.key}
+                                        href={link.href}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleClick(link.href);
+                                        }}
+                                        className={`relative px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-lg ${
+                                            isActive
+                                                ? "text-white"
+                                                : "text-text-secondary hover:text-white"
+                                        }`}
+                                    >
+                                        <span
+                                            className={`absolute inset-0 bg-white/5 rounded-lg transition-opacity duration-200 ${
+                                                isActive ? "opacity-100" : "opacity-0"
+                                            }`}
                                         />
-                                    )}
-                                    <span className="relative z-10">
-                                        {t(`navbar.links.${link.key}`)}
-                                    </span>
-                                </a>
-                            ))}
+                                        <span className="relative z-10">
+                                            {t(`navbar.links.${link.key}`)}
+                                        </span>
+                                    </a>
+                                );
+                            })}
 
-                            <motion.div
-                                className="ml-2"
-                                initial={{ opacity: 0, y: -8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: 0.18 }}
-                                whileHover={{ y: -1 }}
-                            >
+                            <div className="ml-2 transition-transform duration-200 hover:-translate-y-[1px]">
                                 <Select
                                     value={currentLanguage}
                                     onValueChange={handleLanguageChange}
@@ -212,7 +198,7 @@ export default function Navbar() {
                                         ))}
                                     </SelectContent>
                                 </Select>
-                            </motion.div>
+                            </div>
                         </div>
 
                         <div className="md:hidden flex items-center gap-2">
@@ -240,117 +226,97 @@ export default function Navbar() {
                             </Select>
 
                             <button
-                                onClick={() => setMobileOpen(!mobileOpen)}
+                                onClick={() => setMobileOpen((prev) => !prev)}
                                 className="h-10 w-10 shrink-0 inline-flex items-center justify-center p-0 text-text-secondary hover:text-white transition-colors rounded-xl bg-white/[0.04]"
                                 aria-label="Toggle menu"
                             >
-                                {mobileOpen ? (
-                                    <X size={22} />
-                                ) : (
-                                    <Menu size={22} />
-                                )}
+                                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
                             </button>
                         </div>
                     </div>
                 </div>
-            </motion.nav>
+            </nav>
 
-            <AnimatePresence>
-                {mobileOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.22 }}
-                        className="fixed inset-0 z-[60] md:hidden"
-                    >
+            <div
+                className={`fixed inset-0 z-[60] md:hidden transition-opacity duration-200 ${
+                    mobileOpen
+                        ? "opacity-100 pointer-events-auto"
+                        : "opacity-0 pointer-events-none"
+                }`}
+            >
+                <button
+                    type="button"
+                    onClick={() => setMobileOpen(false)}
+                    className="absolute inset-0 w-full h-full bg-black/45 backdrop-blur-sm"
+                    aria-label="Close menu overlay"
+                />
+
+                <aside
+                    className={`absolute right-0 top-0 h-full w-[86%] max-w-[360px] rounded-l-3xl bg-[linear-gradient(180deg,rgba(19,19,26,0.88)_0%,rgba(10,10,16,0.95)_100%)] backdrop-blur-2xl shadow-[0_26px_70px_rgba(0,0,0,0.55)] overflow-hidden transition-transform duration-300 ease-out ${
+                        mobileOpen ? "translate-x-0" : "translate-x-full"
+                    }`}
+                >
+                    <div className="pointer-events-none absolute -top-24 -left-12 w-64 h-64 rounded-full bg-accent-purple/20 blur-[72px]" />
+                    <div className="pointer-events-none absolute -bottom-24 -right-10 w-56 h-56 rounded-full bg-accent-blue/18 blur-[70px]" />
+
+                    <div className="relative h-20 px-5 flex items-center justify-between bg-white/[0.02]">
+                        <div className="text-xl font-bold tracking-tight">
+                            <span className="gradient-text">MG</span>
+                            <span className="text-white/40 font-light ml-1">.</span>
+                        </div>
+
                         <button
                             type="button"
                             onClick={() => setMobileOpen(false)}
-                            className="absolute inset-0 w-full h-full bg-black/45 backdrop-blur-sm"
-                            aria-label="Close menu overlay"
-                        />
-
-                        <motion.aside
-                            initial={{ x: "100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "100%" }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 280,
-                                damping: 32,
-                            }}
-                            className="absolute right-0 top-0 h-full w-[86%] max-w-[360px] rounded-l-3xl bg-[linear-gradient(180deg,rgba(19,19,26,0.88)_0%,rgba(10,10,16,0.95)_100%)] backdrop-blur-2xl shadow-[0_26px_70px_rgba(0,0,0,0.55)] overflow-hidden"
+                            className="h-10 w-10 inline-flex items-center justify-center rounded-xl bg-white/[0.05] text-text-secondary hover:text-white hover:bg-white/[0.08] transition-all duration-200"
+                            aria-label="Close menu"
                         >
-                            <div className="pointer-events-none absolute -top-24 -left-12 w-64 h-64 rounded-full bg-accent-purple/20 blur-[72px]" />
-                            <div className="pointer-events-none absolute -bottom-24 -right-10 w-56 h-56 rounded-full bg-accent-blue/18 blur-[70px]" />
+                            <X size={20} />
+                        </button>
+                    </div>
 
-                            <div className="relative h-20 px-5 flex items-center justify-between bg-white/[0.02]">
-                                <div className="text-xl font-bold tracking-tight">
-                                    <span className="gradient-text">MG</span>
-                                    <span className="text-white/40 font-light ml-1">
-                                        .
-                                    </span>
-                                </div>
+                    <div className="relative p-5">
+                        <p className="text-[11px] text-text-muted uppercase tracking-[0.22em] mb-3 px-2">
+                            {t("navbar.navigation")}
+                        </p>
 
-                                <button
-                                    type="button"
-                                    onClick={() => setMobileOpen(false)}
-                                    className="h-10 w-10 inline-flex items-center justify-center rounded-xl bg-white/[0.05] text-text-secondary hover:text-white hover:bg-white/[0.08] transition-all duration-200"
-                                    aria-label="Close menu"
-                                >
-                                    <X size={20} />
-                                </button>
-                            </div>
+                        <div className="space-y-1.5 rounded-2xl bg-white/[0.02] p-2">
+                            {navLinks.map((link) => {
+                                const isActive = activeSection === link.href.slice(1);
+                                return (
+                                    <a
+                                        key={link.key}
+                                        href={link.href}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleClick(link.href);
+                                        }}
+                                        className={`flex items-center justify-between text-base font-medium py-3 px-3 rounded-xl transition-all duration-200 ${
+                                            isActive
+                                                ? "text-white bg-gradient-to-r from-accent-purple/35 to-accent-blue/20 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+                                                : "text-text-secondary hover:text-white hover:bg-white/[0.06]"
+                                        }`}
+                                    >
+                                        <span>{t(`navbar.links.${link.key}`)}</span>
+                                        {isActive && (
+                                            <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
+                                        )}
+                                    </a>
+                                );
+                            })}
+                        </div>
 
-                            <div className="relative p-5">
-                                <p className="text-[11px] text-text-muted uppercase tracking-[0.22em] mb-3 px-2">
-                                    {t("navbar.navigation")}
-                                </p>
-
-                                <div className="space-y-1.5 rounded-2xl bg-white/[0.02] p-2">
-                                    {navLinks.map((link, i) => (
-                                        <motion.a
-                                            key={link.key}
-                                            href={link.href}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                handleClick(link.href);
-                                            }}
-                                            initial={{ opacity: 0, x: 16 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: i * 0.05 }}
-                                            className={`flex items-center justify-between text-base font-medium py-3 px-3 rounded-xl transition-all duration-200 ${
-                                                activeSection ===
-                                                link.href.slice(1)
-                                                    ? "text-white bg-gradient-to-r from-accent-purple/35 to-accent-blue/20 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
-                                                    : "text-text-secondary hover:text-white hover:bg-white/[0.06]"
-                                            }`}
-                                        >
-                                            <span>
-                                                {t(`navbar.links.${link.key}`)}
-                                            </span>
-                                            {activeSection ===
-                                                link.href.slice(1) && (
-                                                <span className="w-1.5 h-1.5 rounded-full bg-white/90" />
-                                            )}
-                                        </motion.a>
-                                    ))}
-                                </div>
-
-                                <div className="mt-5 rounded-2xl bg-white/[0.03] p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
-                                    <p className="text-sm text-white font-medium">
-                                        {t("navbar.readyTitle")}
-                                    </p>
-                                    <p className="text-xs text-text-muted mt-1 leading-relaxed">
-                                        {t("navbar.readyText")}
-                                    </p>
-                                </div>
-                            </div>
-                        </motion.aside>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        <div className="mt-5 rounded-2xl bg-white/[0.03] p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
+                            <p className="text-sm text-white font-medium">
+                                {t("navbar.readyTitle")}
+                            </p>
+                            <p className="text-xs text-text-muted mt-1 leading-relaxed">
+                                {t("navbar.readyText")}
+                            </p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </>
     );
 }
